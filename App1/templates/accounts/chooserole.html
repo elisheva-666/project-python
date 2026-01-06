@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-[85vh] flex items-center justify-center relative py-12">
+    
+    <div class="absolute inset-0 flex justify-center items-center pointer-events-none">
+        <div class="w-[600px] h-[600px] bg-neon-purple/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <div class="w-full max-w-lg bg-app-card/80 backdrop-blur-xl p-8 md:p-12 rounded-3xl shadow-2xl border border-white/10 relative z-10">
+        
+        <div class="text-center mb-10">
+            <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-gray-800 to-gray-900 border border-white/10 mb-6 shadow-lg shadow-neon-purple/20 group hover:scale-105 transition-transform duration-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-10 h-10 text-neon-purple group-hover:text-white transition-colors">
+                    <path fill-rule="evenodd" d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" clip-rule="evenodd" />
+                </svg>                  
+            </div>
+            <h1 class="text-4xl font-bold text-white mb-3">הגדרת פרופיל</h1>
+            <p class="text-gray-400">בחר את התפקיד שלך ואת הצוות אליו תשוייך</p>
+        </div>
+
+        <form method="POST" class="space-y-8">
+            {% csrf_token %}
+            
+            <div class="group">
+                <label for="role" class="block text-sm font-medium text-gray-300 mb-2 mr-1 group-focus-within:text-neon-purple transition-colors">
+                    בחר תפקיד במערכת
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-neon-purple transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M15.75 2.25H21a.75.75 0 01.75.75v5.25a.75.75 0 01-.75.75h-5.25a.75.75 0 01-.75-.75V3a.75.75 0 01.75-.75zM4.5 9H9.75a.75.75 0 00.75-.75V3a.75.75 0 00-.75-.75H4.5A.75.75 0 003.75 3v5.25A.75.75 0 004.5 9zm6 12.75H4.5a.75.75 0 01-.75-.75v-5.25a.75.75 0 01.75-.75h6a.75.75 0 01.75.75v5.25a.75.75 0 01-.75.75zM12.75 14.25a.75.75 0 01.75-.75h6a.75.75 0 01.75.75v5.25a.75.75 0 01-.75.75h-6a.75.75 0 01-.75-.75v-5.25z" clip-rule="evenodd" />
+                          </svg>                          
+                    </div>
+                    
+                    <select name="role" id="role" class="cursor-pointer appearance-none">
+                        <option value="admin" {% if profile.role == 'admin' %}selected{% endif %}>👨‍💼 מנהל מערכת (Admin)</option>
+                        <option value="user" {% if profile.role == 'user' %}selected{% endif %}>👷 עובד צוות (User)</option>
+                    </select>
+                    
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group">
+                <label for="team" class="block text-sm font-medium text-gray-300 mb-2 mr-1 group-focus-within:text-neon-purple transition-colors">
+                    בחר את הצוות שלך
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-neon-purple transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                            <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122z" />
+                          </svg>                          
+                    </div>
+
+                    <select name="team" id="team" class="cursor-pointer appearance-none">
+                        {% for team in teams %}
+                            <option value="{{ team.Id }}" {% if profile.team == team %}selected{% endif %}>🚀 {{ team.Name }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-5 h-5">
+                            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full bg-gradient-to-r from-neon-purple to-indigo-600 hover:from-neon-hover hover:to-indigo-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-neon-purple/25 transition-all transform hover:-translate-y-1 mt-8 text-lg flex justify-center items-center gap-2 group">
+                <span>שמור והמשך</span>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform">
+                    <path fill-rule="evenodd" d="M7.28 7.72a.75.75 0 010 1.06l-2.47 2.47H21a.75.75 0 010 1.5H4.81l2.47 2.47a.75.75 0 11-1.06 1.06l-3.75-3.75a.75.75 0 010-1.06l3.75-3.75a.75.75 0 011.06 0z" clip-rule="evenodd" />
+                  </svg>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selects = document.querySelectorAll('select');
+        selects.forEach(element => {
+            element.classList.add(
+                'w-full', 
+                'bg-app-input/50', 
+                'text-white', 
+                'border', 
+                'border-gray-600', 
+                'rounded-xl', 
+                'pr-12',
+                'pl-10',
+                'py-4', 
+                'focus:outline-none', 
+                'focus:border-neon-purple', 
+                'focus:ring-1', 
+                'focus:ring-neon-purple', 
+                'transition-all',
+                'cursor-pointer'
+            );
+        });
+    });
+</script>
+{% endblock %}

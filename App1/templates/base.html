@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ניהול משימות</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        // צבעי הרקע הכהים מהתמונות
+                        'app-dark': '#0f172a',       // רקע כללי כהה מאוד
+                        'app-card': '#1e293b',       // צבע הכרטיסיות (טיפה יותר בהיר)
+                        'app-input': '#334155',      // צבע רקע לשדות קלט
+
+                        // צבעי הניאון והכפתורים
+                        'neon-purple': '#6366f1',    // סגול/כחול בוהק לכותרות וכפתורים
+                        'neon-hover': '#4f46e5',     // צבע במעבר עכבר
+
+                        // סטטוסים
+                        'status-new': '#3b82f6',     // כחול לחדש
+                        'status-progress': '#eab308',// צהוב לבתהליך
+                        'status-completed': '#22c55e'// ירוק להושלם
+                    },
+                    fontFamily: {
+                        sans: ['Heebo', 'sans-serif'], // הגדרת פונט יפה בעברית
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* תיקונים קטנים לעברית */
+        body {
+            font-family: 'Heebo', sans-serif;
+        }
+        /* עיצוב גלילה מותאם (Scrollbar) שיהיה יפה */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="bg-app-dark text-gray-100 min-h-screen flex flex-col">
+
+    <main class="flex-grow container mx-auto px-4 py-8">
+
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-lg bg-opacity-90 {% if message.tags == 'success' %}bg-green-600{% else %}bg-red-600{% endif %} shadow-lg border border-white/10">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="text-center py-6 text-gray-500 text-sm">
+        מערכת ניהול משימות &copy; 2026
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center relative overflow-hidden">
+
+    <div class="absolute inset-0 flex justify-center items-center blur-[120px] opacity-20 pointer-events-none">
+        <div class="w-96 h-96 bg-neon-purple rounded-full"></div>
+    </div>
+
+    <div class="w-full max-w-md bg-app-card/80 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/10 relative z-10 transform transition-all">
+
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-neon-purple/20 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-neon-purple/40 shadow-[0_0_15px_rgba(99,102,241,0.3)]">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-neon-purple">
+                    <path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <h2 class="text-3xl font-bold text-white tracking-wide">ברוכים הבאים</h2>
+            <p class="text-gray-400 text-sm mt-2">הזן פרטים כדי להיכנס למערכת המשימות</p>
+        </div>
+
+        <form method="post" class="space-y-6" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="bg-red-500/10 border border-red-500/50 text-red-400 p-3 rounded-xl text-center text-sm font-medium">
+                    {{ form.non_field_errors.0 }}
+                </div>
+            {% endif %}
+
+            <div class="space-y-4">
+                {% for field in form %}
+                    <div class="group">
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-1.5 mr-1 group-focus-within:text-neon-purple transition-colors">
+                            {{ field.label }}
+                        </label>
+
+                        <div class="relative">
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-neon-purple transition-colors">
+                                {% if 'password' in field.name or 'pass' in field.name %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                        <path fill-rule="evenodd" d="M6.75 6.75A6.75 6.75 0 0113.5 0v2.25h-6.75a4.5 4.5 0 00-1.414 8.707 2.25 2.25 0 01-4.329-1.414A6.75 6.75 0 016.75 6.75zM13.5 2.25a6.75 6.75 0 016.75 6.75v2.25h-6.75V2.25z" />
+                                        <path d="M12 11.25a.75.75 0 01.75.75v3a.75.75 0 01-1.5 0v-3a.75.75 0 01.75-.75zM8.25 15.75a3 3 0 013-3h1.5a3 3 0 013 3v2.25a3 3 0 01-3 3h-1.5a3 3 0 01-3-3v-2.25z" />
+                                    </svg>
+                                {% else %}
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                        <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" />
+                                    </svg>
+                                {% endif %}
+                            </div>
+
+                            {{ field }}
+                        </div>
+
+                        {% if field.errors %}
+                            <p class="text-red-400 text-xs mt-1 mr-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="w-full bg-neon-purple hover:bg-neon-hover text-white font-bold py-3.5 px-4 rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all transform hover:-translate-y-0.5 active:translate-y-0 text-lg flex justify-center items-center gap-2 group">
+                התחבר למערכת
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover:-translate-x-1 transition-transform">
+                    <path fill-rule="evenodd" d="M7.28 7.72a.75.75 0 010 1.06l-2.47 2.47H21a.75.75 0 010 1.5H4.81l2.47 2.47a.75.75 0 11-1.06 1.06l-3.75-3.75a.75.75 0 010-1.06l3.75-3.75a.75.75 0 011.06 0z" clip-rule="evenodd" />
+                </svg>
+            </button>
+        </form>
+
+        <div class="mt-8 text-center pt-6 border-t border-white/10">
+            <p class="text-gray-400 text-sm">
+                אין לך עדיין משתמש?
+                <a href="{% url 'register' %}" class="text-neon-purple hover:text-white font-medium transition-colors border-b border-transparent hover:border-white pb-0.5">
+                    צור חשבון חדש
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('form input');
+        inputs.forEach(element => {
+            if (element.type !== 'submit' && element.type !== 'hidden') {
+                element.classList.add(
+                    'w-full',
+                    'bg-app-input/50',
+                    'text-white',
+                    'border',
+                    'border-gray-600',
+                    'rounded-xl',
+                    'pr-12', // מקום לאייקון
+                    'pl-4',
+                    'py-3',
+                    'focus:outline-none',
+                    'focus:border-neon-purple',
+                    'focus:ring-1',
+                    'focus:ring-neon-purple',
+                    'transition-all',
+                    'placeholder-gray-500'
+                );
+            }
+        });
+    });
+</script>
+{% endblock %}

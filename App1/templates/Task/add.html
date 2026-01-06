@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="min-h-[85vh] flex items-center justify-center py-10 relative">
+
+    <div class="absolute inset-0 flex justify-center items-center blur-[100px] opacity-30 pointer-events-none">
+        <div class="w-[40rem] h-[40rem] bg-neon-purple rounded-full"></div>
+    </div>
+
+    <div class="w-full max-w-2xl bg-app-card/80 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-2xl border border-white/10 relative z-10">
+
+        <div class="flex items-center gap-4 mb-10 border-b border-white/10 pb-6">
+            <div class="p-3 bg-neon-purple/20 rounded-2xl border border-neon-purple/50 shadow-[0_0_15px_rgba(99,102,241,0.3)]">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-8 h-8 text-neon-purple">
+                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd" />
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-3xl font-bold text-white tracking-tight">
+                    {% if task %}עריכת משימה{% else %}יצירת משימה חדשה{% endif %}
+                </h2>
+                <p class="text-gray-400 text-sm mt-1">מלא את הפרטים כדי לשמור את המשימה במערכת</p>
+            </div>
+        </div>
+
+        <form method="post" class="space-y-6" novalidate>
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="bg-red-500/10 border border-red-500/50 text-red-400 p-4 rounded-xl flex items-start gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 shrink-0">
+                        <path fill-rule="evenodd" d="M9.401 3.003c1.155-2 4.043-2 5.197 0l7.355 12.748c1.154 2-.29 4.5-2.599 4.5H4.645c-2.309 0-3.752-2.5-2.598-4.5L9.401 3.003zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />
+                    </svg>
+                    <div>{{ form.non_field_errors }}</div>
+                </div>
+            {% endif %}
+
+            <div class="grid grid-cols-1 gap-6">
+                {% for field in form %}
+                    <div class="group">
+                        <label for="{{ field.id_for_label }}" class="block text-sm font-medium text-gray-300 mb-2 transition-colors group-focus-within:text-neon-purple">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-neon-purple">*</span>{% endif %}
+                        </label>
+
+                        <div class="relative">
+                            <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-neon-purple transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                                    <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32L19.513 8.2z" />
+                                </svg>
+                            </div>
+
+                            {{ field }}
+                        </div>
+
+                        {% if field.help_text %}
+                            <p class="mt-1 text-xs text-gray-500">{{ field.help_text }}</p>
+                        {% endif %}
+
+                        {% if field.errors %}
+                            <div class="text-red-400 text-sm mt-2 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                                  </svg>
+                                {% for error in field.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+
+            <div class="pt-8 flex flex-col-reverse md:flex-row gap-4 items-center justify-between border-t border-white/10 mt-8">
+                <a href="{% url 'task_list' %}" class="text-gray-400 hover:text-white transition-colors flex items-center gap-2 py-2 px-4 rounded-xl hover:bg-white/5">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4">
+                        <path fill-rule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clip-rule="evenodd" />
+                      </svg>
+                    ביטול וחזרה
+                </a>
+
+                <button type="submit" class="w-full md:w-auto bg-neon-purple hover:bg-neon-hover text-white font-bold py-4 px-10 rounded-xl shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all transform hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(99,102,241,0.6)] flex items-center justify-center gap-3 text-lg">
+                    {% if task %}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd" />
+                        </svg>
+                        שמור שינויים
+                    {% else %}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                            <path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" />
+                        </svg>
+                        צור משימה חדשה
+                    {% endif %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputs = document.querySelectorAll('form input, form select, form textarea');
+
+        // הגדרת תאריך מינימלי להיום (למניעת בחירת עבר)
+        const today = new Date().toISOString().split('T')[0];
+
+        inputs.forEach(element => {
+            if (element.type === 'hidden' || element.type === 'checkbox' || element.type === 'submit') return;
+
+            // עיצוב אוטומטי לכל השדות בטופס
+            element.classList.add(
+                'w-full',
+                'bg-app-input/50',
+                'text-white',
+                'border',
+                'border-gray-600',
+                'rounded-xl',
+                'pr-12',
+                'pl-4',
+                'py-3.5',
+                'focus:outline-none',
+                'focus:border-neon-purple',
+                'focus:ring-2',
+                'focus:ring-neon-purple/50',
+                'transition-all',
+                'placeholder-gray-500'
+            );
+
+            // זיהוי שדות תאריך
+            if (element.id.toLowerCase().includes('date') || element.name.toLowerCase().includes('date')) {
+                element.type = 'date';
+                element.setAttribute('min', today); // חוסם תאריכים ישנים
+                element.classList.add('color-scheme-dark');
+            }
+        });
+    });
+</script>
+
+<style>
+    ::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        opacity: 0.6;
+        cursor: pointer;
+    }
+    ::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+    }
+</style>
+
+{% endblock %}
